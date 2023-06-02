@@ -7,6 +7,7 @@ import (
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/joho/godotenv"
+	"golang.org/x/crypto/bcrypt"
 )
 
 // Init initializes the environment variables
@@ -60,6 +61,37 @@ func CreateMockUser() {
 	}
 	defer db.Close()
 	_, err = db.Exec("INSERT INTO users (username, password) VALUES ('test', '123456')")
+	if err != nil {
+		log.Println(err)
+	}
+}
+
+// HashPassword hashes the user's password
+func hashPassword(password string) ([]byte, error) {
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), 10)
+	if err != nil {
+		log.Println("Couldn't hash user's password", err)
+		return []byte(""), err
+	}
+	return hashedPassword, nil
+}
+
+// CreateMockLogs creates a mock log for login
+func CreateMockLogs() {
+	db, err := ConnectToDb()
+	if err != nil {
+		log.Println(err)
+	}
+	defer db.Close()
+	userPass, err := hashPassword("123456")
+	if err != nil {
+		log.Println(err)
+	}
+	_, err = db.Exec("INSERT INTO users_logins (username, password) VALUES ('test1', ?)", userPass)
+	if err != nil {
+		log.Println(err)
+	}
+	_, err = db.Exec("INSERT INTO users_logins (username, password) VALUES ('test2', ?)", userPass)
 	if err != nil {
 		log.Println(err)
 	}

@@ -13,6 +13,8 @@ func main() {
 	}
 	// Create mock user
 	config.CreateMockUser()
+	// Create mock logs
+	config.CreateMockLogs()
 	// Start the server
 	delivery.StartServer()
 }

@@ -26,13 +26,16 @@ func init() {
 // StartServer starts the server.
 func StartServer() {
 	r := gin.Default()
-	r.POST("/login", loginHandler)
 	r.Static("/uploads", "./uploads")
-	tokenRequeried := r.Group("/", AuthMiddleware())
+
+	r.POST("/login", loginHandler)
+	r.GET("/logs", getLogsHandler)
+
+	image := r.Group("/", AuthMiddleware())
 	{
-		tokenRequeried.GET("/images", getImagesHandler)
-		tokenRequeried.POST("/upload-picture", postImagesHandler)
-		tokenRequeried.GET("/image/:url")
+		image.GET("/images", getImagesHandler)
+		image.POST("/upload-picture", postImagesHandler)
+		image.GET("/image/:url")
 	}
 	http.ListenAndServe(":8080", r)
 }

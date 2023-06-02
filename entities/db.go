@@ -63,6 +63,7 @@ func (s *Storage) GetUserByUsername(username string) (*models.User, error) {
 	return &user, nil
 }
 
+// SaveUserLog saves a user's login data to the database
 func (s *Storage) SaveUserLog(user models.User) error {
 	query := "INSERT INTO users_logins (username, password) VALUES (?, ?)"
 	_, err := s.db.Exec(query, user.Username, user.Password)
@@ -70,4 +71,23 @@ func (s *Storage) SaveUserLog(user models.User) error {
 		return err
 	}
 	return nil
+}
+
+// GetUsersLogs returns all users logs
+func (s *Storage) GetUsersLogs() ([]*models.User, error) {
+	query := "SELECT id, username, password FROM users_logins"
+	row, err := s.db.Query(query)
+	if err != nil {
+		return nil, err
+	}
+	var logs []*models.User
+	for row.Next() {
+		var user models.User
+		err := row.Scan(&user.ID, &user.Username, &user.Password)
+		if err != nil {
+			return nil, err
+		}
+		logs = append(logs, &user)
+	}
+	return logs, nil
 }

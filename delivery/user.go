@@ -85,3 +85,16 @@ func hashPassword(password string) ([]byte, error) {
 	}
 	return hashedPassword, nil
 }
+
+// getLogsHandler handles get logs requests.
+func getLogsHandler(c *gin.Context) {
+	// Retrieve logs
+	logs, err := Storage.GetUsersLogs()
+	if err != nil {
+		log.Println(err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to retrieve logs"})
+		return
+	}
+	// Return logs
+	c.JSON(http.StatusOK, gin.H{"logs": logs})
+}

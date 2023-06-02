@@ -5,5 +5,6 @@
 3.Run ```go run main.go```  <br>
 Requests:
 - (POST) /login: A mock user is created with the following JSON payload: {"username": "test", "password": 123456}.
+- (GET) /logs: returns a list of all logs
 - (POST) /upload-picture: Upload a picture in the form with the key "image". Include the token received from the login request in the header.
 - (GET) /images: Include the token received from the login request in the header.
