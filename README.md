@@ -1,4 +1,5 @@
 ## Start the application
+```git clone https://github.com/Folium1/testTask.git```
 1.Copy the key of your mysql db source to __MYSQL_SOURCE__ local variable <br>
 2.Start mysql server. <br>
 3.Run ```go run main.go```  <br>
